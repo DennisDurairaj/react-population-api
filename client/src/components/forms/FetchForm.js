@@ -1,20 +1,34 @@
 import React, { Component } from "react";
-import { Form, Button } from "semantic-ui-react";
+import { Form, Button, Dropdown } from "semantic-ui-react";
 import propTypes from "prop-types";
+import axios from "axios";
 
 export default class FetchForm extends Component {
-  state = {
-    countries: {
-      country1: "",
-      country2: "",
-      country3: ""
-    },
-    loading: false
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      countries: {
+        country1: "",
+        country2: "",
+        country3: ""
+      },
+      countriesList: [],
+      loading: false
+    };
+  }
 
-  onChange = e => {
+  componentDidMount() {
+    axios.get("/api/getAllCountries").then(res => {
+      console.log(res);
+      this.setState({
+        countriesList: res.data
+      });
+    });
+  }
+
+  onChange = input => {
     this.setState({
-      countries: { ...this.state.countries, [e.target.name]: e.target.value }
+      countries: { ...this.state.countries, [input.name]: input.value }
     });
   };
 
@@ -22,38 +36,46 @@ export default class FetchForm extends Component {
     e.preventDefault();
     this.setState({ loading: true });
     this.props.submit(this.state.countries).then(res => {
+      console.log(res);
       this.setState({ loading: false });
     });
   };
+
   render() {
     return (
       <Form onSubmit={this.onSubmit} loading={this.state.loading}>
         <Form.Field>
           <label htmlFor="countries">Pick three countries</label>
-          <input
-            type="text"
-            id="country1"
+          <Dropdown
+            placeholder="Select Country"
+            fluid
+            search
+            selection
+            options={this.state.countriesList}
             name="country1"
-            value={this.state.countries.country1}
-            onChange={this.onChange}
+            onChange={(param, data) => this.onChange(data)}
           />
         </Form.Field>
         <Form.Field>
-          <input
-            type="text"
-            id="country2"
+          <Dropdown
+            placeholder="Select Country"
+            fluid
+            search
+            selection
+            options={this.state.countriesList}
             name="country2"
-            value={this.state.countries.country2}
-            onChange={this.onChange}
+            onChange={(param, data) => this.onChange(data)}
           />
         </Form.Field>
         <Form.Field>
-          <input
-            type="text"
-            id="country3"
+          <Dropdown
+            placeholder="Select Country"
+            fluid
+            search
+            selection
+            options={this.state.countriesList}
             name="country3"
-            value={this.state.countries.country3}
-            onChange={this.onChange}
+            onChange={(param, data) => this.onChange(data)}
           />
         </Form.Field>
         <Button primary>Fetch</Button>
