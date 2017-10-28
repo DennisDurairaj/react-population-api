@@ -1,9 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
 import FetchForm from "../forms/FetchForm";
+import { fetchCountries } from "../../actions/fetchData";
 
 class Home extends React.Component {
   submit = data => {
-    console.log(data);
+    return this.props.fetchCountries(data);
   };
   render() {
     return (
@@ -15,4 +17,4 @@ class Home extends React.Component {
   }
 }
 
-export default Home;
+export default connect(null, { fetchCountries })(Home);

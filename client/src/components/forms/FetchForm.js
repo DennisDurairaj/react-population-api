@@ -9,8 +9,7 @@ export default class FetchForm extends Component {
       country2: "",
       country3: ""
     },
-    loading: false,
-    errors: {}
+    loading: false
   };
 
   onChange = e => {
@@ -21,11 +20,14 @@ export default class FetchForm extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    this.props.submit(this.state.countries);
+    this.setState({ loading: true });
+    this.props.submit(this.state.countries).then(res => {
+      this.setState({ loading: false });
+    });
   };
   render() {
     return (
-      <Form onSubmit={this.onSubmit}>
+      <Form onSubmit={this.onSubmit} loading={this.state.loading}>
         <Form.Field>
           <label htmlFor="countries">Pick three countries</label>
           <input
