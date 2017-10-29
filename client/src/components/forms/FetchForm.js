@@ -7,11 +7,7 @@ export default class FetchForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      countries: {
-        country1: "",
-        country2: "",
-        country3: ""
-      },
+      countries: [],
       countriesList: [],
       loading: false
     };
@@ -28,7 +24,10 @@ export default class FetchForm extends Component {
 
   onChange = input => {
     this.setState({
-      countries: { ...this.state.countries, [input.name]: input.value }
+      countries: [
+        ...this.state.countries.filter(country => input.id !== country.id),
+        { id: input.id, name: input.value }
+      ]
     });
   };
 
@@ -52,7 +51,7 @@ export default class FetchForm extends Component {
             search
             selection
             options={this.state.countriesList}
-            name="country1"
+            id="country1"
             onChange={(param, data) => this.onChange(data)}
           />
         </Form.Field>
@@ -63,7 +62,7 @@ export default class FetchForm extends Component {
             search
             selection
             options={this.state.countriesList}
-            name="country2"
+            id="country2"
             onChange={(param, data) => this.onChange(data)}
           />
         </Form.Field>
@@ -74,7 +73,7 @@ export default class FetchForm extends Component {
             search
             selection
             options={this.state.countriesList}
-            name="country3"
+            id="country3"
             onChange={(param, data) => this.onChange(data)}
           />
         </Form.Field>

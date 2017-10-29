@@ -5,9 +5,9 @@ import api from "../api/fetchCountriesApi";
 //   type: FETCHED_COUNTRIES, countries;
 // }
 
-export const fetchedCountries = countries => ({
+export const fetchedCountries = countriesInfo => ({
   type: FETCHED_COUNTRIES,
-  countries
+  countriesInfo
 });
 
 // export function fetchCountries(countries) {
