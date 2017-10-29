@@ -2,7 +2,6 @@
 import express from "express";
 import request from "request";
 import moment from "moment";
-import _ from "lodash";
 const router = express.Router();
 
 // Routes
