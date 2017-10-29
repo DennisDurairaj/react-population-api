@@ -26,7 +26,7 @@ export default class FetchForm extends Component {
     this.setState({
       countries: [
         ...this.state.countries.filter(country => input.id !== country.id),
-        { id: input.id, name: input.value }
+        { country: input.value }
       ]
     });
   };
