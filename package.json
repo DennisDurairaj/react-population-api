@@ -4,7 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec babel-node -- src/index.js"
+    "setup": "npm install && cd client/ && npm install",
+    "client": "cd client/ && npm start",
+    "server": "nodemon --exec babel-node -- server/src/index.js"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
