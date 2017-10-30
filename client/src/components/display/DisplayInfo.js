@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import propTypes from "prop-types";
 import { Header, Divider, Grid } from "semantic-ui-react";
 import DisplayInfoItem from "./DisplayInfoItem";
 
@@ -11,7 +12,6 @@ export default class DisplayInfo extends Component {
         <Grid columns={3} divided>
           <Grid.Row>
             {this.props.countriesInfo.map((country, index) => {
-              console.log(country);
               return <DisplayInfoItem country={country} key={country.key} />;
             })}
           </Grid.Row>
@@ -20,3 +20,7 @@ export default class DisplayInfo extends Component {
     );
   }
 }
+
+DisplayInfo.propTypes = {
+  countriesInfo: propTypes.array.isRequired
+};

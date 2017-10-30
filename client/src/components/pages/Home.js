@@ -1,4 +1,5 @@
 import React from "react";
+import propTypes from "prop-types";
 import { connect } from "react-redux";
 import FetchForm from "../forms/FetchForm";
 import DisplayInfo from "../display/DisplayInfo";
@@ -24,10 +25,14 @@ class Home extends React.Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     countriesInfo: state.countries.countriesInfo
   };
 }
+
+Home.propTypes = {
+  countriesInfo: propTypes.array,
+  fetchCountriesInfo: propTypes.func.isRequired
+};
 
 export default connect(mapStateToProps, { fetchCountriesInfo })(Home);

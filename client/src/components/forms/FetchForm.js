@@ -100,6 +100,8 @@ function mapStateToProps(state) {
 }
 
 FetchForm.propTypes = {
+  countriesList: propTypes.array,
+  fetchCountriesList: propTypes.func.isRequired,
   submit: propTypes.func.isRequired
 };
 
