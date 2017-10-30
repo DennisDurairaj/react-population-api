@@ -1,10 +1,17 @@
 import axios from "axios";
 
 export default {
-  countries: {
-    fetchCountries: countries =>
+  countriesInfo: {
+    fetchCountriesInfo: countries =>
       axios.post("/api/getCountries", { countries }).then(res => {
         return res.data;
       })
+  },
+  countriesList: {
+    fetchCountriesList: () => {
+      return axios.get("/api/getAllCountries").then(res => {
+        return res.data;
+      });
+    }
   }
 };

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Form, Button, Dropdown } from "semantic-ui-react";
+import { fetchCountriesList } from "../../actions/fetchData";
 import propTypes from "prop-types";
-import axios from "axios";
 
-export default class FetchForm extends Component {
+class FetchForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,19 +15,14 @@ export default class FetchForm extends Component {
   }
 
   componentDidMount() {
-    axios.get("/api/getAllCountries").then(res => {
-      console.log(res);
-      this.setState({
-        countriesList: res.data
-      });
-    });
+    this.props.fetchCountriesList();
   }
 
   onChange = input => {
     this.setState({
       countries: [
-        ...this.state.countries.filter(country => input.id !== country.id),
-        { country: input.value }
+        ...this.state.countries.filter(country => input.id !== country.key),
+        { key: input.id, country: input.value }
       ]
     });
   };
@@ -35,7 +31,6 @@ export default class FetchForm extends Component {
     e.preventDefault();
     this.setState({ loading: true });
     this.props.submit(this.state.countries).then(res => {
-      console.log(res);
       this.setState({ loading: false });
     });
   };
@@ -45,12 +40,14 @@ export default class FetchForm extends Component {
       <Form onSubmit={this.onSubmit} loading={this.state.loading}>
         <Form.Field>
           <label htmlFor="countries">Pick three countries</label>
+          {/* Pass dropdown options empty array for initial render until async 
+          request finishes in order to prevent console error */}
           <Dropdown
             placeholder="Select Country"
             fluid
             search
             selection
-            options={this.state.countriesList}
+            options={this.props.countriesList || []}
             id="country1"
             onChange={(param, data) => this.onChange(data)}
           />
@@ -61,7 +58,7 @@ export default class FetchForm extends Component {
             fluid
             search
             selection
-            options={this.state.countriesList}
+            options={this.props.countriesList || []}
             id="country2"
             onChange={(param, data) => this.onChange(data)}
           />
@@ -72,7 +69,7 @@ export default class FetchForm extends Component {
             fluid
             search
             selection
-            options={this.state.countriesList}
+            options={this.props.countriesList || []}
             id="country3"
             onChange={(param, data) => this.onChange(data)}
           />
@@ -83,6 +80,14 @@ export default class FetchForm extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    countriesList: state.countries.countriesList
+  };
+}
+
 FetchForm.propTypes = {
   submit: propTypes.func.isRequired
 };
+
+export default connect(mapStateToProps, { fetchCountriesList })(FetchForm);
