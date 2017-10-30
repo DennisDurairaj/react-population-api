@@ -2,6 +2,8 @@
 import express from "express";
 import request from "request";
 import moment from "moment";
+import commaNumber from "comma-number";
+import _ from "lodash";
 const router = express.Router();
 
 // Routes
@@ -23,14 +25,14 @@ router.get("/getAllCountries", (req, res) => {
 
 // Get selected countries population
 router.post("/getCountries", (req, res) => {
-  let countries = req.body.countries;
+  const countries = _.uniqBy(req.body.countries, "country");
   const today = moment(new Date()).format("YYYY-MM-DD");
   let countriesPromises = countries.map((country, index) => {
     return makeRequest(
       `http://api.population.io:80/1.0/population/${country.country}/2017-10-28/`
     )
       .then(res => {
-        country.population = res.total_population.population;
+        country.population = commaNumber(res.total_population.population);
         return hydrateWithFemaleLifeExpectancy(country);
       })
       .then(res => {
@@ -43,7 +45,7 @@ router.post("/getCountries", (req, res) => {
       res.status(200).json(responses);
     })
     .catch(err => {
-      console.log(Error(err));
+      res.status(400).json({ error: err });
     });
 });
 
@@ -68,11 +70,11 @@ function hydrateWithFemaleLifeExpectancy(data) {
       `http://api.population.io:80/1.0/life-expectancy/total/female/${data.country}/1952-01-01/`
     )
       .then(res => {
-        data.femaleLifeExpectancy = res.total_life_expectancy;
+        data.femaleLifeExpectancy = Math.floor(res.total_life_expectancy);
         resolve(data);
       })
       .catch(err => {
-        reject(Error(err));
+        reject(`Insufficient information for ${data.country}`);
       });
   });
 }
@@ -83,11 +85,11 @@ function hydrateWithMaleLifeExpectancy(data) {
       `http://api.population.io:80/1.0/life-expectancy/total/male/${data.country}/1952-01-01/`
     )
       .then(res => {
-        data.maleLifeExpectancy = res.total_life_expectancy;
+        data.maleLifeExpectancy = Math.floor(res.total_life_expectancy);
         resolve(data);
       })
       .catch(err => {
-        reject(Error(err));
+        reject(`Insufficient information for ${data.country}`);
       });
   });
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Form, Button, Dropdown } from "semantic-ui-react";
+import { Form, Button, Dropdown, Message } from "semantic-ui-react";
 import { fetchCountriesList } from "../../actions/fetchData";
 import propTypes from "prop-types";
 
@@ -9,8 +9,8 @@ class FetchForm extends Component {
     super(props);
     this.state = {
       countries: [],
-      countriesList: [],
-      loading: false
+      loading: false,
+      error: ""
     };
   }
 
@@ -30,14 +30,27 @@ class FetchForm extends Component {
   onSubmit = e => {
     e.preventDefault();
     this.setState({ loading: true });
-    this.props.submit(this.state.countries).then(res => {
-      this.setState({ loading: false });
-    });
+    this.props
+      .submit(this.state.countries)
+      .then(res => {
+        this.setState({ loading: false });
+      })
+      .catch(err => {
+        this.setState({ error: err.response.data.error, loading: false });
+      });
   };
 
   render() {
     return (
       <Form onSubmit={this.onSubmit} loading={this.state.loading}>
+        {this.state.error ? (
+          <Message negative>
+            <Message.Header>Error</Message.Header>
+            <p>{this.state.error}</p>
+          </Message>
+        ) : (
+          ""
+        )}
         <Form.Field>
           <label htmlFor="countries">Pick three countries</label>
           {/* Pass dropdown options empty array for initial render until async 
