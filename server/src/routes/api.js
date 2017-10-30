@@ -25,6 +25,7 @@ router.get("/getAllCountries", (req, res) => {
 
 // Get selected countries population
 router.post("/getCountries", (req, res) => {
+  // Remove duplicates
   const countries = _.uniqBy(req.body.countries, "country");
   const today = moment(new Date()).format("YYYY-MM-DD");
   let countriesPromises = countries.map((country, index) => {
@@ -64,6 +65,7 @@ function makeRequest(url) {
   // Create a new Promise
 }
 
+// Populates the response with female life expectancy
 function hydrateWithFemaleLifeExpectancy(data) {
   return new Promise((resolve, reject) => {
     makeRequest(
@@ -79,6 +81,7 @@ function hydrateWithFemaleLifeExpectancy(data) {
   });
 }
 
+// Populates the response with male life expectancy
 function hydrateWithMaleLifeExpectancy(data) {
   return new Promise((resolve, reject) => {
     makeRequest(

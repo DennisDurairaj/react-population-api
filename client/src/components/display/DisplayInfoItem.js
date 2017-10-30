@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import propTypes from "prop-types";
 import { Grid, List } from "semantic-ui-react";
 
 export default class DisplayInfoItem extends Component {
@@ -24,3 +25,7 @@ export default class DisplayInfoItem extends Component {
     );
   }
 }
+
+DisplayInfoItem.propTypes = {
+  country: propTypes.object.isRequired
+};
