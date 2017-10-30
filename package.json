@@ -4,8 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "setup": "npm install && cd client/ && npm install",
-    "client": "cd client/ && npm start",
+    "setup":
+      "(yarn install || npm install) && cd client/ && (yarn install || npm install)",
+    "client": "cd client/ && yarn start || npm start",
     "server": "nodemon --exec babel-node -- server/src/index.js"
   },
   "devDependencies": {
